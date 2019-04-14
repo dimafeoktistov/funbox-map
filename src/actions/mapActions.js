@@ -8,3 +8,6 @@ export const addRoute = actionCreator(ADD_ROUTE, "payload");
 
 export const INIT_MAP = "app/INIT_MAP";
 export const initMap = actionCreator(INIT_MAP);
+
+export const UPDATE_POLYLINE = "app/UPDATE_POLYLINE";
+export const updatePolyline = actionCreator(UPDATE_POLYLINE);

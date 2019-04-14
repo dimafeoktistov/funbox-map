@@ -1,4 +1,7 @@
 import { put, takeLatest, all, select } from "redux-saga/effects";
+
+import store from "../getStore";
+
 import * as mapActions from "../actions/mapActions";
 import * as placesListActions from "../actions/placesListActions";
 import ymaps from "../utils/yMap";
@@ -26,20 +29,20 @@ function* initMap() {
 }
 
 function updateMarker(e) {
-    const marker = e.get('target');
-    const id = marker.properties.get('id');
-    console.log(id);
+  const marker = e.get("target");
+  const id = marker.properties.get("id");
+  const coords = marker.geometry.getCoordinates();
+  store.dispatch(placesListActions.updatePlace({ id, coords }));
+  store.dispatch(mapActions.updatePolyline());
 }
 
-function* addRoute(action) {
-  const id = i++;
-  const { map, polyLine } = yield select(({ mapReducer }) => mapReducer);
+function* addPlacemark(action) {
+  const id = `place-${i++}`;
+  const { map } = yield select(({ mapReducer }) => mapReducer);
   const { payload: name } = action;
   const coords = map.getCenter();
 
-  const place = { name, coords, id };
-
-  const myPlacemark = new ymaps.Placemark(
+  const placemark = new ymaps.Placemark(
     coords,
     {
       // При клике на маркер, появится название точки.
@@ -51,16 +54,41 @@ function* addRoute(action) {
       preset: "islands#whiteStretchyIcon"
     }
   );
-  console.log(myPlacemark);
-  myPlacemark.events.add("dragend", updateMarker);
+
+  placemark.events.add("dragend", updateMarker);
+
+  const place = { name, coords, id, placemark };
   yield put(placesListActions.savePlace(place));
-  map.geoObjects.add(myPlacemark);
-  polyLine.geometry.setCoordinates([[55.75, 37.57], [54.75, 36.57]]);
+  map.geoObjects.add(placemark);
+  yield put(mapActions.updatePolyline());
+}
+
+function* removePlacemark(action) {
+  const { map } = yield select(({ mapReducer }) => mapReducer);
+  const { payload: place } = action;
+  yield map.geoObjects.remove(place.placemark);
+  yield put(mapActions.updatePolyline());
+}
+
+function* updatePolyline() {
+  const coordsArray = yield select(({ placesListReducer: { placesList } }) => {
+    return placesList.map(place => place.coords);
+  });
+
+  const { polyLine } = yield select(state => ({
+    polyLine: state.mapReducer.polyLine
+  }));
+  console.log(polyLine);
+  polyLine.geometry.setCoordinates(coordsArray);
+  console.log(coordsArray);
 }
 
 export function* mapSaga() {
   yield all([
-    takeLatest(placesListActions.ADD_PLACE, addRoute),
-    takeLatest(mapActions.INIT_MAP, initMap)
+    takeLatest(placesListActions.ADD_PLACE, addPlacemark),
+    takeLatest(placesListActions.DELETE_PLACE, removePlacemark),
+    takeLatest(placesListActions.REORDER_PLACES, updatePolyline),
+    takeLatest(mapActions.INIT_MAP, initMap),
+    takeLatest(mapActions.UPDATE_POLYLINE, updatePolyline)
   ]);
 }

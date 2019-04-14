@@ -1,15 +1,16 @@
 import React, { useEffect } from "react";
-import { connect } from 'react-redux';
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
 
-import * as mapActions from '../../actions/mapActions';
-import * as placesListActions from '../../actions/placesListActions';
+import * as mapActions from "../../actions/mapActions";
+import * as placesListActions from "../../actions/placesListActions";
 
-import Search from '../Search';
+import PlacesList from "../PlacesList";
 
-import ymaps from '../../utils/yMap';
+import ymaps from "../../utils/yMap";
 import "./App.css";
 
-const App = ({ initMap, addPlace }) => {
+const App = ({ initMap, addPlace, placesList, deletePlace, reorderPlaces }) => {
   useEffect(() => {
     window.addEventListener("load", handleLoad);
   }, []);
@@ -27,17 +28,46 @@ const App = ({ initMap, addPlace }) => {
           Edit <code>src/App.js</code> and save to reload.
         </p>
       </header>
-      <Search addPlace={addPlace} />
-      <div id="map" style={{ width: "600px", height: "400px" }} />
+      <div className="container">
+        <PlacesList
+          places={placesList}
+          addPlace={addPlace}
+          deletePlace={deletePlace}
+          reorderPlaces={reorderPlaces}
+        />
+        <div id="map" style={{ width: "600px", height: "400px" }} />
+      </div>
     </div>
   );
 };
 
-// const mapStateToProps = state => ({});
+App.propTypes = {
+  initMap: PropTypes.func.isRequired,
+  addPlace: PropTypes.func.isRequired,
+  placesList: PropTypes.instanceOf(Array).isRequired,
+  reorderPlaces: PropTypes.func.isRequired
+};
 
-const mapDispatchToProps = dispatch => ({
-    initMap() { dispatch(mapActions.initMap()) },
-    addPlace(place) { dispatch(placesListActions.addPlace(place)) }
+const mapStateToProps = ({ placesListReducer: { placesList } }) => ({
+  placesList
 });
 
-export default connect(null, mapDispatchToProps)(App);
+const mapDispatchToProps = dispatch => ({
+  initMap() {
+    dispatch(mapActions.initMap());
+  },
+  addPlace(place) {
+    dispatch(placesListActions.addPlace(place));
+  },
+  deletePlace(place) {
+    dispatch(placesListActions.deletePlace(place));
+  },
+  reorderPlaces(places) {
+    dispatch(placesListActions.reorderPlaces(places));
+  }
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App);
