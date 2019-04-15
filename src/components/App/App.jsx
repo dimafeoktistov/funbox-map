@@ -25,7 +25,7 @@ const App = ({ initMap, addPlace, placesList, deletePlace, reorderPlaces }) => {
     <div className="App">
       <header className="App-header">
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+          Тестовое задание для FunBox.
         </p>
       </header>
       <div className="container">
@@ -35,7 +35,7 @@ const App = ({ initMap, addPlace, placesList, deletePlace, reorderPlaces }) => {
           deletePlace={deletePlace}
           reorderPlaces={reorderPlaces}
         />
-        <div id="map" style={{ width: "600px", height: "400px" }} />
+        <div id="map" />
       </div>
     </div>
   );

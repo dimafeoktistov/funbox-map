@@ -1,4 +1,4 @@
-import { put, takeLatest, all, select } from "redux-saga/effects";
+import { put, takeLatest, all, select, fork } from "redux-saga/effects";
 
 import store from "../getStore";
 
@@ -6,7 +6,10 @@ import * as mapActions from "../actions/mapActions";
 import * as placesListActions from "../actions/placesListActions";
 import ymaps from "../utils/yMap";
 
-let i = 0;
+const generateId = () =>
+  Math.random()
+    .toString(36)
+    .substr(2, 9);
 
 function* initMap() {
   const map = new ymaps.Map("map", {
@@ -18,7 +21,7 @@ function* initMap() {
     [],
     {},
     {
-      strokeWidth: 6,
+      strokeWidth: 2,
       strokeColor: "#0000FF"
     }
   );
@@ -37,7 +40,7 @@ function updateMarker(e) {
 }
 
 function* addPlacemark(action) {
-  const id = `place-${i++}`;
+  const id = generateId();
   const { map } = yield select(({ mapReducer }) => mapReducer);
   const { payload: name } = action;
   const coords = map.getCenter();
@@ -60,14 +63,14 @@ function* addPlacemark(action) {
   const place = { name, coords, id, placemark };
   yield put(placesListActions.savePlace(place));
   map.geoObjects.add(placemark);
-  yield put(mapActions.updatePolyline());
+  yield fork(updatePolyline);
 }
 
 function* removePlacemark(action) {
   const { map } = yield select(({ mapReducer }) => mapReducer);
   const { payload: place } = action;
   yield map.geoObjects.remove(place.placemark);
-  yield put(mapActions.updatePolyline());
+  yield fork(updatePolyline);
 }
 
 function* updatePolyline() {
@@ -78,9 +81,7 @@ function* updatePolyline() {
   const { polyLine } = yield select(state => ({
     polyLine: state.mapReducer.polyLine
   }));
-  console.log(polyLine);
   polyLine.geometry.setCoordinates(coordsArray);
-  console.log(coordsArray);
 }
 
 export function* mapSaga() {

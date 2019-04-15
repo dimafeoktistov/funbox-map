@@ -10,7 +10,7 @@ const Search = ({ addPlace, ...props }) => {
     addPlace(place);
     setPlace('')
   }
-  // addPlaceToMap(place);
+
   return (
     <form onSubmit={handleSubmit} {...props}>
       <input

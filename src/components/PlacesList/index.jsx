@@ -52,6 +52,7 @@ const PlacesList = ({
                 />
               ))}
               {provided.placeholder}
+              {places.length === 0 && <p>Пока не добавлено ни одного маркера</p>}
             </ul>
           )}
         </Droppable>
