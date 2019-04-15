@@ -29,6 +29,7 @@ function* initMap() {
   map.geoObjects.add(polyLine);
 
   yield put(mapActions.createMap({ map, polyLine }));
+  yield put(mapActions.setLoading());
 }
 
 function updateMarker(e) {

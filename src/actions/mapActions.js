@@ -11,3 +11,6 @@ export const initMap = actionCreator(INIT_MAP);
 
 export const UPDATE_POLYLINE = "app/UPDATE_POLYLINE";
 export const updatePolyline = actionCreator(UPDATE_POLYLINE);
+
+export const SET_LOADING = "app/SET_LOADING";
+export const setLoading = actionCreator(SET_LOADING);

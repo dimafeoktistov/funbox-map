@@ -1,9 +1,22 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import Paper from "@material-ui/core/Paper";
+import Typography from "@material-ui/core/Typography";
 
 import Search from "../Search";
 import ListItem from "../ListItem";
+
+import "./PlacesList.css";
+
+const paperStyle = {
+  marginRight: 20,
+  padding: 15,
+  maxHeight: "90vh",
+  overflowX: "scroll",
+  minWidth: 350,
+  maxWidth: 350
+};
 
 const PlacesList = ({
   places,
@@ -22,7 +35,6 @@ const PlacesList = ({
   };
 
   const onDragEnd = result => {
-    console.log(result);
     const { destination, source } = result;
 
     if (!destination) {
@@ -37,7 +49,7 @@ const PlacesList = ({
     reorderPlaces(items);
   };
   return (
-    <div {...props}>
+    <Paper {...props} style={paperStyle}>
       <Search addPlace={addPlace} />
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="droppable">
@@ -52,12 +64,16 @@ const PlacesList = ({
                 />
               ))}
               {provided.placeholder}
-              {places.length === 0 && <p>Пока не добавлено ни одного маркера</p>}
+              {places.length === 0 && (
+                <Typography component="p">
+                  Пока не добавлено ни одного маркера
+                </Typography>
+              )}
             </ul>
           )}
         </Droppable>
       </DragDropContext>
-    </div>
+    </Paper>
   );
 };
 

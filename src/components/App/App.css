@@ -2,26 +2,28 @@
   text-align: center;
 }
 
-.App-header {
-  background-color: #282c34;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: 28px;
-  color: white;
-  height: 60px;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
 .container {
   display: flex;
+  justify-content: flex-start;
+  padding: 10px;
 }
 
 #map {
   width: 70%;
-  height: calc(100vh - 80px);
+  height: calc(100vh - 100px);
 }
+
+.spinner {
+  display: flex;
+  background-color: white;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  z-index: 100;
+}
+
+/* html * {
+    font-family: Roboto, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif
+} */
