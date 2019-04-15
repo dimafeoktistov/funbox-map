@@ -10,7 +10,7 @@ import PlacesList from "../PlacesList";
 import ymaps from "../../utils/yMap";
 import "./App.css";
 
-const App = ({ initMap, addPlace, placesList, deletePlace, reorderPlaces }) => {
+export const App = ({ initMap, addPlace, placesList, deletePlace, reorderPlaces }) => {
   useEffect(() => {
     window.addEventListener("load", handleLoad);
   }, []);
