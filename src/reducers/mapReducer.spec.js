@@ -3,6 +3,7 @@ import { mapReducer } from "./mapReducer";
 describe("редьюсер карты", () => {
   it("возвращает изначальное состояние", () => {
     expect(mapReducer(undefined, {})).toEqual({
+      loading: true,
       map: null,
       polyLine: null
     });

@@ -9,6 +9,7 @@ it('renders without crashing', () => {
                     initMap={() => {}}
                     addPlace={() => {}}
                     reorderPlaces={() => {}}
+                    loading
                     />, div);
   ReactDOM.unmountComponentAtNode(div);
 });
