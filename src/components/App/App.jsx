@@ -7,6 +7,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Snackbar from "@material-ui/core/Snackbar";
 
 import * as mapActions from "../../actions/mapActions";
 import * as placesListActions from "../../actions/placesListActions";
@@ -22,7 +23,9 @@ export const App = ({
   placesList,
   deletePlace,
   reorderPlaces,
-  loading
+  loading,
+  snackBar,
+  handleClose
 }) => {
   useEffect(() => {
     window.addEventListener("load", handleLoad);
@@ -36,6 +39,16 @@ export const App = ({
 
   return (
     <>
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        open={snackBar.open}
+        ContentProps={{
+          "aria-describedby": "message-id"
+        }}
+        onClose={() => handleClose({ open: false, message: '' })}
+        autoHideDuration={3000}
+        message={<span id="message-id">{snackBar.message}</span>}
+      />
       <CssBaseline />
       {loading && (
         <div className="spinner">
@@ -74,10 +87,11 @@ App.propTypes = {
 
 const mapStateToProps = ({
   placesListReducer: { placesList },
-  mapReducer: { loading }
+  mapReducer: { loading, snackBar }
 }) => ({
   placesList,
-  loading
+  loading,
+  snackBar
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -92,6 +106,9 @@ const mapDispatchToProps = dispatch => ({
   },
   reorderPlaces(places) {
     dispatch(placesListActions.reorderPlaces(places));
+  },
+  handleClose(snackBar) {
+    dispatch(mapActions.setSnapbar(snackBar))
   }
 });
 

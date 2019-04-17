@@ -14,3 +14,6 @@ export const updatePolyline = actionCreator(UPDATE_POLYLINE);
 
 export const SET_LOADING = "app/SET_LOADING";
 export const setLoading = actionCreator(SET_LOADING);
+
+export const SET_SNAPBAR = "app/SET_SNAPBAR";
+export const setSnapbar = actionCreator(SET_SNAPBAR, "payload")

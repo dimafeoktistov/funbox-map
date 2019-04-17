@@ -43,28 +43,54 @@ function updateMarker(e) {
 function* addPlacemark(action) {
   const id = generateId();
   const { map } = yield select(({ mapReducer }) => mapReducer);
+  const { placesList } = yield select(
+    ({ placesListReducer }) => placesListReducer
+  );
   const { payload: name } = action;
   const coords = map.getCenter();
 
-  const placemark = new ymaps.Placemark(
-    coords,
-    {
-      // При клике на маркер, появится название точки.
-      balloonContent: name,
-      id
-    },
-    {
-      draggable: true, // Маркер можно перемещать.
-      preset: "islands#whiteStretchyIcon"
-    }
-  );
+  const isNameUniq = placesList.find(place => place.name === name);
+  const isCoordsUniq = placesList.find(place => {
+    return place.coords[0] === coords[0] && place.coords[1] === coords[1];
+  });
 
-  placemark.events.add("dragend", updateMarker);
+  console.log(isCoordsUniq);
 
-  const place = { name, coords, id, placemark };
-  yield put(placesListActions.savePlace(place));
-  map.geoObjects.add(placemark);
-  yield fork(updatePolyline);
+  if (!!isCoordsUniq) {
+    yield put(
+      mapActions.setSnapbar({
+        open: true,
+        message: "Точка с такими координатами уже есть!"
+      })
+    );
+  } else if (!!isNameUniq) {
+    yield put(
+      mapActions.setSnapbar({
+        open: true,
+        message: "Точка с таким названием уже есть!"
+      })
+    );
+  } else {
+    const placemark = new ymaps.Placemark(
+      coords,
+      {
+        // При клике на маркер, появится название точки.
+        balloonContent: name,
+        id
+      },
+      {
+        draggable: true, // Маркер можно перемещать.
+        preset: "islands#whiteStretchyIcon"
+      }
+    );
+
+    placemark.events.add("dragend", updateMarker);
+
+    const place = { name, coords, id, placemark };
+    yield put(placesListActions.savePlace(place));
+    map.geoObjects.add(placemark);
+    yield fork(updatePolyline);
+  }
 }
 
 function* removePlacemark(action) {

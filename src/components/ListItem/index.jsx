@@ -25,7 +25,7 @@ const ListItem = ({ place, deletePlace, index }) => {
           {...provided.dragHandleProps}
         >
           <Paper style={listItemStyle}>
-            <Typography variant="p" style={{ maxWidth: "75%" }}>
+            <Typography component="p" style={{ maxWidth: "75%" }}>
               {place.name}
             </Typography>
             <Button
