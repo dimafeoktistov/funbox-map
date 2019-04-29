@@ -5,7 +5,8 @@ describe("редьюсер карты", () => {
     expect(mapReducer(undefined, {})).toEqual({
       loading: true,
       map: null,
-      polyLine: null
+      polyLine: null,
+      snackBar: {message: null, open: false }
     });
   });
 
@@ -18,6 +19,9 @@ describe("редьюсер карты", () => {
           payload: { map: "Карта", polyLine: "Кривая" }
         }
       )
-    ).toEqual({ map: "Карта", polyLine: "Кривая" });
+    ).toEqual({
+      map: "Карта",
+      polyLine: "Кривая"
+    });
   });
 });

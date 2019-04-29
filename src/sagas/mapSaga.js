@@ -2,7 +2,9 @@ import { put, takeLatest, all, select, fork } from "redux-saga/effects";
 
 import store from "../getStore";
 
+import * as mapSelectors from '../selectors/mapSelector';
 import * as mapActions from "../actions/mapActions";
+import * as placesListSelectors from '../selectors/placesListSelector';
 import * as placesListActions from "../actions/placesListActions";
 import ymaps from "../utils/yMap";
 
@@ -42,19 +44,16 @@ function updateMarker(e) {
 
 function* addPlacemark(action) {
   const id = generateId();
-  const { map } = yield select(({ mapReducer }) => mapReducer);
-  const { placesList } = yield select(
-    ({ placesListReducer }) => placesListReducer
-  );
+  const map = yield select(mapSelectors.mapSelector);
+  const placesList = yield select(placesListSelectors.placesListSelector);
+  console.log(placesList);
   const { payload: name } = action;
   const coords = map.getCenter();
 
-  const isNameUniq = placesList.find(place => place.name === name);
+  const isNameUniq = placesList.find(place => place.name.toLowerCase() === name.toLowerCase());
   const isCoordsUniq = placesList.find(place => {
     return place.coords[0] === coords[0] && place.coords[1] === coords[1];
   });
-
-  console.log(isCoordsUniq);
 
   if (!!isCoordsUniq) {
     yield put(
@@ -94,20 +93,16 @@ function* addPlacemark(action) {
 }
 
 function* removePlacemark(action) {
-  const { map } = yield select(({ mapReducer }) => mapReducer);
+  const map = yield select(mapSelectors.mapSelector);
   const { payload: place } = action;
   yield map.geoObjects.remove(place.placemark);
   yield fork(updatePolyline);
 }
 
 function* updatePolyline() {
-  const coordsArray = yield select(({ placesListReducer: { placesList } }) => {
-    return placesList.map(place => place.coords);
-  });
+  const coordsArray = yield select(placesListSelectors.coordsSelector);
 
-  const { polyLine } = yield select(state => ({
-    polyLine: state.mapReducer.polyLine
-  }));
+  const polyLine = yield select(mapSelectors.polyLineSelector);
   polyLine.geometry.setCoordinates(coordsArray);
 }
 

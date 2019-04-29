@@ -30,12 +30,12 @@ const ListItem = ({ place, deletePlace, index }) => {
             </Typography>
             <Button
               type="button"
-              style={{ width: "25%" }}
+              style={{ width: "20%" }}
               onClick={handleDelete}
               variant="contained"
               color="secondary"
             >
-              Удалить
+              x
             </Button>
           </Paper>
         </li>
