@@ -1,13 +1,13 @@
 {
-  "main.css": "/funbox-map/static/css/main.d4024471.chunk.css",
-  "main.js": "/funbox-map/static/js/main.db0becd5.chunk.js",
-  "main.js.map": "/funbox-map/static/js/main.db0becd5.chunk.js.map",
+  "main.css": "/funbox-map/static/css/main.a991b34e.chunk.css",
+  "main.js": "/funbox-map/static/js/main.e9d2b324.chunk.js",
+  "main.js.map": "/funbox-map/static/js/main.e9d2b324.chunk.js.map",
   "runtime~main.js": "/funbox-map/static/js/runtime~main.45228355.js",
   "runtime~main.js.map": "/funbox-map/static/js/runtime~main.45228355.js.map",
-  "static/js/2.3efd20ea.chunk.js": "/funbox-map/static/js/2.3efd20ea.chunk.js",
-  "static/js/2.3efd20ea.chunk.js.map": "/funbox-map/static/js/2.3efd20ea.chunk.js.map",
+  "static/js/2.cc424d9b.chunk.js": "/funbox-map/static/js/2.cc424d9b.chunk.js",
+  "static/js/2.cc424d9b.chunk.js.map": "/funbox-map/static/js/2.cc424d9b.chunk.js.map",
   "index.html": "/funbox-map/index.html",
-  "precache-manifest.3977e19838f5fc404c2bed342c8e7354.js": "/funbox-map/precache-manifest.3977e19838f5fc404c2bed342c8e7354.js",
+  "precache-manifest.0bcd0c2347a8f173561d7fa47d8c39ab.js": "/funbox-map/precache-manifest.0bcd0c2347a8f173561d7fa47d8c39ab.js",
   "service-worker.js": "/funbox-map/service-worker.js",
-  "static/css/main.d4024471.chunk.css.map": "/funbox-map/static/css/main.d4024471.chunk.css.map"
+  "static/css/main.a991b34e.chunk.css.map": "/funbox-map/static/css/main.a991b34e.chunk.css.map"
 }
