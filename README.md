@@ -1,68 +1,62 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+# Тестовое задание для FunBox
 
-In the project directory, you can run:
+## Ответ на вторую часть задания
 
-### `npm start`
+Для создания SPA использовал React, Redux, redux-saga и апи яндекс карт. Работы с апи Яндекс карт вынесены в отдельный слой(в саги). Для стилизации был использован UI фраймворк Material UI.
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Для запуска в режиме разработки нужно установить зависимости (либо `npm install`, либо `yarn install`) и затем запустить команду `npm run start` или `yarn start` в зависимости от того какой менеджер пакетов у вас установлен.
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+Результат также можно посмотерть [онлайн](https://dimafeoktistov.github.io/funbox-map/).
 
-### `npm test`
+## Ответы на первую часть тестового задания
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Расскажите, чем, на ваш взгляд, отличается хорошее клиентское приложение от плохого с точки зрения…
 
-### `npm run build`
+- *пользователя* - когда приложение быстро грузится, красивое, удобный и понятный интерфейс который позволяет пользователю интуитивно определить что где находится и какие действия нужно совершить, чтобы решить проблему с которой он пришел на сайт.
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- *менеджера проекта* - думаю с точки зрения менеджера большую роль играет команда которая работает над приложением. Для него важно чтобы были релизы новых фич в срок установленный заказчиком и чтобы всё это укладывалось по деньгам.
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+- *дизайнера* - с точки зрения дизайнера хорошее приложение это красивое приложение. Когда есть общий стиль, типографика, выработанный style-гайд для разработчиков. С хорошим style-гайдом frontend разработчики сами могут решать какие цвета, шрифты и т.п. использовать, что ускоряет работу команды и дизайнеру меньше работы.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- *верстальщика* - опять же style-гайд. Меньше скруглений или каких то треугольных форм, которые очень трудно реализовать нативным css. Блочная структура приложения. Это позволяет переиспользовать элементы верстки (компонентов - если мы говорим о современных фреймворках как react, angular, vue).
+серверного программиста - понятные сущности в приложении. Оптимизированные запросы к базе. Понятное хорошо задокументированное API.
 
-### `npm run eject`
+### Опишите основные особенности разработки крупных многостраничных сайтов, функциональность которых может меняться в процессе реализации и поддержки.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Особенность разработки таких сайтов, если мы говорим об SPA в том что у приложения очень большой state с которым надо как то управляться. Если мы говорим про реакт то разработано много библиотек и подходов для решение этой проблемы например redux, mobX и др. В многостраничном приложении нужно избегать сильной связанности элементов. В react это решается при помощи чистых функций и если если есть логика с сайд-эффектами её необходимо выносить в отдельный слой (например **redux-thunk**, **redux-saga**, **redux-observable**). Сильная связанность компонентов между собой не только мешает их переиспользованию но и создаёт ситуации когда изменения в одном места приложения могут сломать что нибудь в другом месте, или к тому что меняешь логику - падает вёрстка, и наоборот. В результате поддерживать такое приложение всё сложнее и ввод нового функционала всё труднее.
+Для того чтобы избегать этого нужно единообразие подходов к разработке, ведение понятной документации, следование code-style принятого в команде style-гайд. Ещё помогает code review.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### При разработке интерфейсов с использованием компонентной архитектуры часто используются термины *Presentational Components* и *Container Components*. Что означают данные термины? Зачем нужно такое разделение, какие у него есть плюсы и минусы?
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+Это достаточно условное разделение. Компоненты которые называют этими терминами также еще называют smart/dumb components, stateful/stateless и т.д. Они делятся по тому что в них происходит. Обычно в компонентах контейнерах идёт получение (например из redux, за счет селектора в mapStateToProps), обработка данных (в случае redux обычно mapDispatchToProps), и они ответственны за то чтобы передать эти данные дальше по дереву компонентов, а presentational components за отображение данных. В презентационных компонентах часто используются такие пропы как например - children. В презентационных компонентах не должно быть стейта максимум стейт UI. Из плюсов: тупые компоненты легко тестировать, т.к. никакой бизнес логики там нет, разделение логики и представления, меньшая связанность компонентов, большая переиспользуемость. Из минусов: усложняется структура проекта (нужно смотреть откуда пришли пропы). В React 16.8, когда были добавлены хуки, которые позволили использовать стейт и другие фичи реакта без использования классов реализовывать presentational components стало проще, т.к. теперь для создания пары полей state например для модалки не надо превращать функцию в класс.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### Как устроено наследование в JS? Расскажите о своем опыте реализации JS наследования без использования фреймворков.
 
-## Learn More
+В JS прототипное наследование. Инстансы новых объектов обычно создаются либо через функцию конструктор (классы в ES6+ всего лишь синтаксический сахар для добавления методов в прототипы), либо при помощи object literal, либо при помощи factories functions (функция не конструктор, но возвращающая объект). При создании объекта через функцию конструктор инстанс объекта будет иметь методы которые есть в прототипе функции конструктора и в прототипах объектов от которых унаследован этот инстанс. Такой способ схож с классовым наследованием в ООП языках (например Java). React предлагает нам предпочитать композицию над наследованием. Композицию объектов можно произвести при помощи метода Object.assign(). Object.assign копирует все свойства объектов в новый объект и мы можем получить объект с нужными нам свойствами. По такому же принципу реализованы .extend() из lodash и $.extend() из jQuery.
+Лично я использовал наследование только при создании классов оберток для каких то REST API. Т.е. был базовый класс который реализовывал основные http методы(get, post, put, delete) от которого наследовались другие классы которые применялись при обращении к определенным сервисам (например какие то микросервисы у которых отличается например url, или необходимы какие либо спецефичные хедеры).
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Какие библиотеки можно использовать для написания тестов end-to-end во фронтенде? Расскажите о своем опыте тестирования веб-приложений.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Опыта в тестировании очень мало, а особенно в end-to-end. Для end-to-end тестирования можно использовать Selenium. Я для тестирования использовал только Jest, Jasmine и Enzyme.
 
-### Code Splitting
+### Вам нужно реализовать форму для отправки данных на сервер, состоящую из нескольких шагов. В вашем распоряжении дизайн формы и статичная верстка, в которой не показано, как форма должна работать в динамике. Подробного описания, как должны вести себя различные поля в зависимости от действий пользователя, в требованиях к проекту нет. Ваши действия?
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+Сначала сверстаю статичную форму, затем обращусь к бизнес аналитикам с просьбой прояснить как форма должна работать в динамике. Затем если будет нужно попрошу дизайнера доделать описание.
 
-### Analyzing the Bundle Size
+### Расскажите, какие инструменты помогают вам экономить время в процессе написания, проверки и отладки кода.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+IDE (я предпочитаю VS-Code), линтеры (ES-Lint, TSLint), дебаггер, автосейв, авторелоад, HMR (hot module replacement), Git Extensions (для работы с git), плагины для хрома при работе с реактом (React-devtools, redux-devtools).
 
-### Making a Progressive Web App
+### Какие ресурсы вы используете для развития в профессиональной сфере? Приведите несколько конкретных примеров (сайты, блоги и так далее).
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+Использую разные, в основном иностранные ресурсы. Из основных это medium, egghead.io, pluralsight. Так же использую coursehunters, т.к. там можно найти много хороших курсов в открытом доступе.
 
-### Advanced Configuration
+### Какие еще области знаний, кроме тех, что непосредственно относятся к работе, вам интересны?
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+Много разных интересов: биология, английский язык, походы, фильмы, сериалы.
 
-### Deployment
+### Расскажите нам немного о себе и предоставьте несколько ссылок на последние работы, выполненные вами.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+Меня зовут Дмитрий, мне 28 лет. Живу в городе Томск. Начал изучать фронтенд примерно с февраля прошлого года. До этого с программированием связан не был. Учился на биолога и примерно 2 года назад защитил кандидатскую диссертацию по биологии. После защиты появилось свободное время и я подал на конкурс от Google на бесплатный Front-end developer nanodegree от Udacity. Конкурс прошел и прошел курс от Udacity, и понял что мне нравится заниматься фронтендом. Интересна как вёрстка так и программирование на JS и других языках.
+Показывать проект с текущего места работы я к сожалению не могу, т.к. делаю сервисы для внутреннего использования компании. Вот ссылка на мой сайт “портфолио” - dimafeoktistov.com. Там 3 небольших проекта которые были сделаны в рамках курса от Udacity.

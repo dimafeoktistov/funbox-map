@@ -5,6 +5,6 @@ export const placesListSelector = createSelector(
   placesList => placesList
 );
 export const coordsSelector = createSelector(
-  state => state.placesListReducer.placesList,
+  placesListSelector,
   placesList => placesList.map(place => place.coords)
 );
