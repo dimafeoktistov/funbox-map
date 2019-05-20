@@ -10,8 +10,11 @@ import Snackbar from "@material-ui/core/Snackbar";
 
 import PlacesList from "../PlacesList";
 
+import AsyncComponent from "./AsyncComponent";
 import ymaps from "../../utils/yMap";
 import "./App.css";
+
+const TestComponent = AsyncComponent(() => import('./Test'));
 
 export const App = ({
   initMap,
@@ -51,6 +54,7 @@ export const App = ({
           <CircularProgress />
         </div>
       )}
+      <TestComponent />
       <div className="App">
         <AppBar position="static" color="default">
           <Toolbar>
